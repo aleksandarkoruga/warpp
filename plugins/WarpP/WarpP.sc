@@ -1,10 +1,17 @@
-WarpP : UGen {
-	*ar { |input, gain|
-		/* TODO */
-		^this.multiNew('audio', input, gain);
+
+WarpP : MultiOutUGen {
+	*ar	{ arg numChannels = 1, bufnum = 0, pointer = 0, freqScale = 1,
+		windowSize = 0.2, envbufnum = -1, overlaps = 8, windowRandRatio = 0.0, interp = 1, density = 0.5,
+		mul = 1, add = 0;
+		^this.multiNew('audio', numChannels, bufnum, pointer, freqScale,
+			windowSize, envbufnum, overlaps, windowRandRatio, interp).madd(mul, add)
 	}
-	checkInputs {
-		/* TODO */
-		^this.checkValidInputs;
+
+	init { arg argNumChannels ... theInputs;
+		inputs = theInputs;
+		^this.initOutputs(argNumChannels, rate)
 	}
+
+	argNamesInputsOffset { ^2 }
+
 }
